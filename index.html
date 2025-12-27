@@ -649,10 +649,39 @@
             font-size: 0.9rem;
             padding: 10px;
         }
+
+        /* ===== TOAST THÔNG BÁO ĐẸP ===== */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: linear-gradient(135deg, #7b0f1a, #d63384);
+            color: #fff;
+            padding: 14px 22px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.4s ease;
+            z-index: 2000;
+            text-align: center;
+            max-width: 85%;
+        }
+
+        /* Hiện toast */
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
     </style>
 </head>
 
 <body>
+    <!-- TOAST NOTIFICATION -->
+    <div id="toast" class="toast"></div>
+
     <audio id="bgMusic" loop>
         <source src="I Do.mp3" type="audio/mpeg">
     </audio>
@@ -928,12 +957,12 @@
 
             // Validate
             if (!name) {
-                alert("💌 Bạn vui lòng nhập tên nhé!");
+                showToast("💌 Bạn vui lòng nhập tên nhé!");
                 return;
             }
 
             if (!attend) {
-                alert("💍 Bạn vui lòng chọn trạng thái tham dự!");
+                showToast("💍 Bạn vui lòng chọn trạng thái tham dự!");
                 return;
             }
 
@@ -950,11 +979,11 @@
             wishes.push(wish);
             localStorage.setItem("wedding_wishes", JSON.stringify(wishes));
 
-            // Thông báo
-            alert(
-                `💖 Cảm ơn ${name}!\n` +
-                `Gia đình đã nhận được lời chúc của bạn.\n\n` +
-                `Trạng thái: ${attend}`
+            // Toast thông báo đẹp
+            showToast(
+                `💖 Cảm ơn <b>${name}</b>!<br>` +
+                `Gia đình đã nhận được lời chúc của bạn 💐<br>` +
+                `<small>Trạng thái: ${attend}</small>`
             );
 
             // Reset form
@@ -962,6 +991,17 @@
             document.getElementById("attendance").value = "";
             document.getElementById("message").value = "";
         }
+
+        function showToast(message) {
+            const toast = document.getElementById("toast");
+            toast.innerHTML = message;
+            toast.classList.add("show");
+
+            setTimeout(() => {
+                toast.classList.remove("show");
+            }, 3000); // tự ẩn sau 3s
+        }
+
     </script>
 </body>
 
